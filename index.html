@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>乡心守护，数智同行 - 数字化服务平台</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+
+        body {
+            background-color: #fdf6f6;
+        }
+
+        /* 页面主体 */
+        .container {
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+        .title {
+            font-size: 32px;
+            color: #c72c41;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+        .desc {
+            font-size: 18px;
+            color: #555;
+            line-height: 1.7;
+            margin-bottom: 30px;
+        }
+
+        /* AI 客服 红色主题 */
+        .ai-service {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+        .ai-btn {
+            background: #c72c41;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 15px;
+            box-shadow: 0 3px 10px rgba(199,44,65,0.3);
+            transition: 0.3s;
+        }
+        .ai-btn:hover {
+            background: #b12035;
+        }
+        .ai-chat {
+            display: none;
+            width: 320px;
+            height: 450px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 12px;
+            overflow: hidden;
+            flex-direction: column;
+            border: 1px solid #eee;
+        }
+        .ai-header {
+            background: #c72c41;
+            color: white;
+            padding: 15px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .ai-body {
+            flex: 1;
+            padding: 12px;
+            overflow-y: auto;
+            font-size: 14px;
+            background: #fafafa;
+        }
+        .ai-input {
+            display: flex;
+            border-top: 1px solid #eee;
+        }
+        .ai-input input {
+            flex: 1;
+            border: none;
+            padding: 14px;
+            outline: none;
+            font-size: 14px;
+        }
+        .ai-input button {
+            border: none;
+            background: #c72c41;
+            color: white;
+            padding: 0 18px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .msg {
+            margin: 8px 0;
+            padding: 8px 12px;
+            border-radius: 10px;
+            max-width: 75%;
+            line-height: 1.4;
+        }
+        .user {
+            background: #fce4e4;
+            margin-left: auto;
+            text-align: right;
+        }
+        .bot {
+            background: #ffffff;
+            margin-right: auto;
+            border: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 class="title">乡心守护，数智同行<br>乡村留守群体心理健康数字化帮扶项目</h1>
+    <p class="desc">
+        欢迎来到本项目<strong>数字化服务平台</strong>，我们致力于用数字技术为乡村留守群体提供心理健康服务与暖心陪伴。
+    </p >
+</div>
+
+<!-- AI 客服 -->
+<div class="ai-service">
+    <div class="ai-chat" id="aiChat">
+        <div class="ai-header">项目智能客服</div>
+        <div class="ai-body" id="aiBody"></div>
+        <div class="ai-input">
+            <input type="text" id="aiQuestion" placeholder="请输入您的问题...">
+            <button onclick="sendMsg()">发送</button>
+        </div>
+    </div>
+    <button class="ai-btn" onclick="toggleChat()">AI 客服</button>
+</div>
+
+<script>
+function toggleChat() {
+    const chat = document.getElementById('aiChat');
+    chat.style.display = chat.style.display === 'flex' ? 'none' : 'flex';
+}
+
+// 项目专属问答
+const qaList = [
+    { q: "项目名称", a: "项目全称：乡心守护，数智同行——乡村留守群体心理健康数字化帮扶项目" },
+    { q: "平台名称", a: "本平台名称：数字化服务平台" },
+    { q: "项目介绍", a: "本项目面向乡村留守群体，运用数字化技术提供心理健康测评、咨询、科普与陪伴服务。" },
+    { q: "服务对象", a: "主要服务：乡村留守儿童、留守老人等留守群体。" },
+    { q: "服务内容", a: "提供心理测评、线上咨询、心理科普、情绪疏导、陪伴关怀等数字化服务。" },
+    { q: "项目意义", a: "用数智力量守护乡村留守群体心理健康，缓解孤独与焦虑，助力乡村振兴。" },
+    { q: "怎么使用平台", a: "您可以在平台上进行心理测评、查看科普、预约咨询、联系工作人员。" },
+    { q: "如何联系我们", a: "可在平台首页查看联系方式，或留言给我们。" },
+    { q: "你是谁", a: "我是乡心守护项目AI客服，为您解答项目相关问题~" }
+];
+
+function sendMsg() {
+    const input = document.getElementById('aiQuestion');
+    const text = input.value.trim();
+    if (!text) return;
+
+    addMsg(text, 'user');
+    input.value = '';
+
+    setTimeout(() => {
+        let answer = "抱歉，我暂时无法回答这个问题，您可以问：项目介绍、服务对象、服务内容等。";
+        for (let item of qaList) {
+            if (text.includes(item.q)) {
+                answer = item.a;
+                break;
+            }
+        }
+        addMsg(answer, 'bot');
+    }, 600);
+}
+
+function addMsg(text, role) {
+    const body = document.getElementById('aiBody');
+    const div = document.createElement('div');
+    div.className = 'msg ' + role;
+    div.innerText = text;
+    body.appendChild(div);
+    body.scrollTop = body.scrollHeight;
+}
+
+document.getElementById('aiQuestion').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') sendMsg();
+});
+</script>
+
+</body>
+</html>
