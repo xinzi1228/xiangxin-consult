@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>乡心守护 - AI智能客服</title>
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Microsoft YaHei",sans-serif;
+}
+body{
+    background:#f8f9fa;
+    max-width:600px;
+    margin:0 auto;
+    padding:20px;
+}
+.header{
+    background:#c8102e;
+    color:white;
+    padding:16px;
+    border-radius:12px;
+    text-align:center;
+    margin-bottom:20px;
+}
+.header h1{
+    font-size:20px;
+    margin-bottom:6px;
+}
+.header p{
+    font-size:14px;
+    opacity:0.9;
+}
+.chat-box{
+    background:white;
+    border-radius:12px;
+    height:500px;
+    padding:16px;
+    overflow-y:auto;
+    margin-bottom:12px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.05);
+}
+.bot-message,.user-message{
+    margin-bottom:12px;
+    max-width:75%;
+    line-height:1.5;
+    font-size:15px;
+}
+.bot-message{
+    background:#f6f7f9;
+    padding:10px 14px;
+    border-radius:12px 12px 12px 0;
+    float:left;
+    clear:both;
+}
+.user-message{
+    background:#c8102e;
+    color:white;
+    padding:10px 14px;
+    border-radius:12px 12px 0 12px;
+    float:right;
+    clear:both;
+}
+.input-area{
+    display:flex;
+    gap:8px;
+}
+#user-input{
+    flex:1;
+    padding:12px 16px;
+    border:1px solid #ddd;
+    border-radius:24px;
+    outline:none;
+    font-size:15px;
+}
+#send-btn{
+    background:#c8102e;
+    color:white;
+    border:none;
+    padding:12px 20px;
+    border-radius:24px;
+    cursor:pointer;
+}
+#send-btn:hover{
+    background:#a80820;
+}
+.clear{
+    clear:both;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+    <h1>乡心守护·数智同行</h1>
+    <p>乡村留守群体心理健康数字化服务平台 · AI客服</p >
+</div>
+
+<div class="chat-box" id="chatBox">
+    <div class="bot-message">你好！我是乡心守护AI客服，我可以为你介绍项目、平台功能、心理帮扶服务等内容😊</div>
+    <div class="clear"></div>
+</div>
+
+<div class="input-area">
+    <input type="text" id="userInput" placeholder="请输入你想了解的问题...">
+    <button id="sendBtn">发送</button>
+</div>
+
+<script>
+const chatBox = document.getElementById('chatBox');
+const userInput = document.getElementById('userInput');
+const sendBtn = document.getElementById('sendBtn');
+
+function addMessage(text,isUser){
+    let div = document.createElement('div');
+    div.className = isUser ? 'user-message' : 'bot-message';
+    div.innerText = text;
+    chatBox.appendChild(div);
+    let clearDiv = document.createElement('div');
+    clearDiv.className = 'clear';
+    chatBox.appendChild(clearDiv);
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+function getAnswer(text){
+    let t = text.trim();
+    if(t.includes('项目') || t.includes('干什么')){
+        return '本项目全称：乡心守护·数智同行——乡村留守群体心理健康数字化帮扶项目，主要为乡村留守儿童、留守老人提供线上心理疏导、情感陪伴、科普宣传等服务。';
+    }else if(t.includes('平台') || t.includes('系统')){
+        return '我们搭建的是「数字化服务平台」，提供AI咨询、心理测评、线上疏导、科普知识、求助通道等功能，方便留守群体使用。';
+    }else if(t.includes('留守') || t.includes('老人') || t.includes('儿童')){
+        return '我们重点服务乡村留守儿童、留守老人，通过数字化方式缓解孤独、焦虑、情绪压力，提供陪伴式心理支持。';
+    }else if(t.includes('帮助') || t.includes('服务')){
+        return '平台提供：AI心理陪伴、心理科普、情绪疏导、危机提示、联系线下志愿者等服务。';
+    }else if(t.includes('红色') || t.includes('主题')){
+        return '平台以红色为主色调，象征温暖、守护、关爱与希望，传递乡心守护的温暖力量。';
+    }else if(t.includes('你是谁') || t.includes('客服')){
+        return '我是乡心守护AI客服，专门解答项目、平台、心理健康帮扶相关问题。';
+    }else{
+        return '你可以问我：项目介绍、平台功能、服务对象、服务内容、主题风格等问题，我会为你解答~';
+    }
+}
+
+function send(){
+    let text = userInput.value;
+    if(!text) return;
+    addMessage(text,true);
+    userInput.value = '';
+    setTimeout(()=>{
+        addMessage(getAnswer(text),false);
+    },500);
+}
+
+sendBtn.addEventListener('click',send);
+userInput.addEventListener('keydown',e=>{
+    if(e.key === 'Enter') send();
+});
+</script>
+</body>
+</html>
